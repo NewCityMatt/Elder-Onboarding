@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elder Onboarding - New City Church</title>
+    
+    <!-- iOS Web App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Elder Onboarding">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- iOS Home Screen Icon -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiMwMGIxZTAiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4KPC9zdmc+">
+    
+    <!-- Theme Color for Mobile Browsers -->
+    <meta name="theme-color" content="#00b1e0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+        }
+
+        .header {
+            background: #ffffff;
+            padding: 1rem;
+            border-bottom: 3px solid #00b1e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(65,64,66,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+            color: #414042;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: #414042;
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .export-btn, .clear-btn {
+            padding: 0.5rem 1rem;
+            background: #00b1e0;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .export-btn:hover {
+            background: #008bb8;
+            transform: translateY(-1px);
+        }
+
+        .clear-btn {
+            background: #f7941d;
+            flex: 0 0 auto;
+        }
+
+        .clear-btn:hover {
+            background: #e8850e;
+            transform: translateY(-1px);
+        }
+
+        .email-note {
+            font-size: 0.7rem;
+            color: #414042;
+            flex: 1;
+            opacity: 0.7;
+        }
+
+        .save-indicator {
+            font-size: 0.7rem;
+            color: #64ad89;
+            padding: 0.25rem 0.5rem;
+            background: rgba(100, 173, 137, 0.1);
+            border-radius: 0.25rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+        }
+
+        .keyboard-hint {
+            font-size: 0.65rem;
+            color: #414042;
+            margin-top: 0.25rem;
+            opacity: 0.5;
+        }
+
+        .progress-bar {
+            margin-top: 0.5rem;
+            height: 6px;
+            background: rgba(65, 64, 66, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00b1e0 0%, #64ad89 100%);
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 0.7rem;
+            color: #414042;
+            margin-top: 0.25rem;
+            opacity: 0.7;
+        }
+
+        .tabs {
+            background: #ffffff;
+            padding: 0.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            display: inline-block;
+            padding: 0.5rem 0.75rem;
+            margin: 0.25rem;
+            border: none;
+            background: rgba(65, 64, 66, 0.08);
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            color: #414042;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            background: rgba(65, 64, 66, 0.15);
+        }
+
+        .tab:focus {
+            outline: 2px solid #00b1e0;
+            outline-offset: 2px;
+        }
+
+        .tab.active {
+            background: rgba(0, 177, 224, 0.1);
+            color: #00b1e0;
+            font-weight: 600;
+        }
+
+        .tab.completed {
+            background: rgba(100, 173, 137, 0.1);
+            color: #64ad89;
+        }
+
+        .content {
+            padding: 1rem;
+            padding-bottom: 6rem;
+        }
+
+        .section {
+            display: none;
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(65, 64, 66, 0.08);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #414042;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.125rem;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #414042;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1rem;
+            margin-top: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: #414042;
+            font-weight: 600;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+            color: #414042;
+            opacity: 0.8;
+        }
+
+        .info-box {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+            border-left: 3px solid #00b1e0;
+            background: rgba(0, 177, 224, 0.05);
+        }
+
+        .info-box-orange {
+            background: rgba(247, 148, 29, 0.1);
+            border-color: #f7941d;
+        }
+
+        .info-box-gray {
+            background: rgba(65, 64, 66, 0.05);
+            border-color: #414042;
+        }
+
+        .info-box-purple {
+            background: rgba(100, 173, 137, 0.1);
+            border-color: #64ad89;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: #414042;
+        }
+
+        .textarea-wrapper {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(65, 64, 66, 0.2);
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 1rem;
+            min-height: 100px;
+            resize: vertical;
+            transition: border-color 0.2s;
+            background: #ffffff;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #00b1e0;
+            box-shadow: 0 0 0 3px rgba(0, 177, 224, 0.1);
+        }
+
+        textarea.single-line {
+            min-height: 50px;
+        }
+
+        .char-count {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            font-size: 0.7rem;
+            color: #414042;
+            background: #ffffff;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            opacity: 0.6;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+            color: #414042;
+            opacity: 0.8;
+        }
+
+        .qual-box {
+            padding: 0.875rem;
+            margin: 0.5rem 0;
+            background: rgba(65, 64, 66, 0.03);
+            border-radius: 0.5rem;
+            border-left: 3px solid #64ad89;
+            transition: transform 0.2s;
+        }
+
+        .qual-box:hover {
+            transform: translateX(4px);
+            background: rgba(100, 173, 137, 0.05);
+        }
+
+        .qual-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #414042;
+        }
+
+        .expandable {
+            border: 1px solid rgba(65, 64, 66, 0.2);
+            border-radius: 0.5rem;
+            margin: 0.75rem 0;
+            overflow: hidden;
+        }
+
+        .expandable-header {
+            padding: 1rem;
+            background: rgba(65, 64, 66, 0.03);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background 0.2s;
+            color: #414042;
+        }
+
+        .expandable-header:hover {
+            background: rgba(65, 64, 66, 0.08);
+        }
+
+        .expandable-header:focus {
+            outline: 2px solid #00b1e0;
+            outline-offset: -2px;
+        }
+
+        .expandable-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .expandable-content.open {
+            padding: 1rem;
+            max-height: 5000px;
+        }
+
+        .assessment-box {
+            background: rgba(65, 64, 66, 0.02);
+            border: 1px solid rgba(65, 64, 66, 0.1);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+
+        .subsection {
+            background: #ffffff;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px rgba(65, 64, 66, 0.05);
+        }
+
+        .nav-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            padding: 0.75rem;
+            border-top: 1px solid rgba(65, 64, 66, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 -2px 4px rgba(65, 64, 66, 0.08);
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            color: #414042;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s;
+            opacity: 0.7;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            color: #00b1e0;
+            opacity: 1;
+        }
+
+        .nav-btn:focus {
+            outline: 2px solid #00b1e0;
+            outline-offset: 2px;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .complete-btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 0.375rem;
+            color: white;
+            font-weight: 600;
+            background: #00b1e0;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .complete-btn:hover {
+            background: #008bb8;
+            transform: translateY(-1px);
+        }
+
+        .complete-btn:focus {
+            outline: 2px solid #00b1e0;
+            outline-offset: 2px;
+        }
+
+        .complete-btn.completed {
+            background: #64ad89;
+        }
+
+        .complete-btn.completed:hover {
+            background: #5a9a7b;
+            transform: translateY(-1px);
+        }
+
+        .completion-notice {
+            background: rgba(247, 148, 29, 0.1);
+            border: 1px solid #f7941d;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            text-align: center;
+            font-size: 0.875rem;
+            animation: slideIn 0.3s;
+            color: #414042;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .modal-btn:hover {
+            opacity: 0.8;
+        }
+
+        .modal-btn.cancel {
+            background: rgba(65, 64, 66, 0.1);
+            color: #414042;
+        }
+
+        .modal-btn.confirm {
+            background: #f7941d;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            
+            .content {
+                padding: 0.75rem;
+            }
+            
+            .section {
+                padding: 1rem;
+            }
+            
+            .nav-footer {
+                padding: 0.5rem;
+            }
+        }
+
+        @media print {
+            .header, .tabs, .nav-footer, .export-btn, .clear-btn {
+                display: none !important;
+            }
+            
+            .section {
+                display: block !important;
+                page-break-after: always;
+            }
+        }
+
+        /* Accessibility improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
+        }
+
+        /* iOS-specific enhancements */
+        @supports (-webkit-touch-callout: none) {
+            /* iOS Safari specific styles */
+            body {
+                -webkit-text-size-adjust: 100%;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+            
+            textarea {
+                -webkit-user-select: text;
+                user-select: text;
+            }
+            
+            .tab, .nav-btn, .complete-btn, .export-btn, .clear-btn {
+                -webkit-tap-highlight-color: rgba(0, 177, 224, 0.3);
+            }
+            
+            /* Prevent zoom on input focus */
+            input, textarea, select {
+                font-size: 16px;
+            }
+        }
+
+        /* Standalone mode styles (when added to home screen) */
+        @media (display-mode: standalone) {
+            .header {
+                padding-top: env(safe-area-inset-top, 1rem);
+            }
+            
+            .nav-footer {
+                padding-bottom: env(safe-area-inset-bottom, 0.75rem);
+            }
+            
+            body {
+                background: #ffffff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Elder Onboarding</h1>
+        <p>New City Church</p>
+        <div class="header-actions">
+            <button class="export-btn" onclick="exportResponses()" aria-label="Export responses">📥 Export</button>
+            <button class="clear-btn" onclick="confirmClearData()" aria-label="Clear all data">🗑️ Clear</button>
+            <div class="email-note">Email to:<br>matt@newcitychurch.com</div>
+            <div class="save-indicator" id="save-indicator" role="status" aria-live="polite">✓ Saved</div>
+        </div>
+        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Overall completion progress">
+            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0 of 7 sections completed</div>
+        <div class="keyboard-hint">💡 Use ← → arrow keys to navigate sections</div>
+    </div>
+
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Onboarding sections"></nav>
+
+    <main class="content">
+        <!-- Section 1: Assessment -->
+        <section class="section active" data-section="0" role="tabpanel" aria-labelledby="tab-0">
+            <h2>Elder Self-Assessment</h2>
+            <p style="margin-bottom: 1rem;"><strong>Before you begin:</strong> These questions are for all potential elders to facilitate conversations with your coach.</p>
+            
+            <label class="form-label" for="name">Your Name:</label>
+            <div class="textarea-wrapper">
+                <textarea class="single-line" id="name" placeholder="Enter your full name" aria-required="true"></textarea>
+            </div>
+
+            <div class="assessment-box">
+                <h3 style="margin-top: 0;">Maturity</h3>
+                <p style="color: #666; font-size: 0.9rem;">Life Experience & Spiritual Formation</p>
+                
+                <div class="subsection">
+                    <h4>Personal Reflection</h4>
+                    <label class="form-label" for="mat-personal">What areas of spiritual maturity are developing in your life?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="mat-personal" placeholder="Reflect on your spiritual journey..."></textarea>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h4>Coach/Pastor Observations</h4>
+                    <label class="form-label" for="mat-coach">Areas where growth is needed:</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="mat-coach" placeholder="Coach notes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h4>Action Steps & Goals</h4>
+                    <label class="form-label" for="mat-goals">Specific steps and timeline:</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="mat-goals" placeholder="Specific steps, resources, timeline..."></textarea>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h4>Progress Notes</h4>
+                    <label class="form-label" for="mat-progress">Ongoing reflections:</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="mat-progress" placeholder="Ongoing reflections and milestones..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="assessment-box">
+                <h3 style="margin-top: 0;">Competency</h3>
+                <p style="color: #666; font-size: 0.9rem;">Leadership & Ministry Skills</p>
+                
+                <div class="subsection">
+                    <h4>Personal Reflection</h4>
+                    <label class="form-label" for="comp-personal">What leadership roles have you served in?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="comp-personal" placeholder="List ministry experiences..."></textarea>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h4>Coach/Pastor Observations</h4>
+                    <label class="form-label" for="comp-coach">Areas where growth is needed:</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="comp-coach" placeholder="Coach notes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h4>Action Steps & Goals</h4>
+                    <label class="form-label" for="comp-goals">Leadership development plan:</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="comp-goals" placeholder="Leadership areas to develop..."></textarea>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h4>Progress Notes</h4>
+                    <label class="form-label" for="comp-progress">Development tracking:</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="comp-progress" placeholder="Ongoing development..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="assessment-box">
+                <h3 style="margin-top: 0;">Shepherding</h3>
+                <p style="color: #666; font-size: 0.9rem;">Care & Pastoral Heart</p>
+                
+                <div class="subsection">
+                    <h4>Personal Reflection</h4>
+                    <label class="form-label" for="shep-personal">How have you cared for others in the body of Christ?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="shep-personal" placeholder="Times you've shepherded others..."></textarea>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h4>Coach/Pastor Observations</h4>
+                    <label class="form-label" for="shep-coach">Areas where growth is needed:</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="shep-coach" placeholder="Coach notes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h4>Action Steps & Goals</h4>
+                    <label class="form-label" for="shep-goals">Shepherding development plan:</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="shep-goals" placeholder="How will you develop shepherding?"></textarea>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h4>Progress Notes</h4>
+                    <label class="form-label" for="shep-progress">Care ministry tracking:</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="shep-progress" placeholder="Ongoing pastoral care..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Welcome -->
+        <section class="section" data-section="1" role="tabpanel" aria-labelledby="tab-1">
+            <h2>Welcome to Elder Leadership</h2>
+            <div class="info-box">
+                <p style="font-weight: 600; margin-bottom: 0;"><strong>You are in the room because you are a part of the most faithful within New City Church.</strong></p>
+            </div>
+            
+            <h3>The Noble Work</h3>
+            <p>Inspired by Acts 6:4, 1 Timothy 3:2-7, and Titus 1:7-9, serving as an Elder is a sacred calling to shepherd God's people with wisdom, humility, and grace.</p>
+
+            <h3>Your Journey</h3>
+            <p>This onboarding experience will guide you through:</p>
+            <ul>
+                <li>Biblical qualifications for Eldership</li>
+                <li>New City Church's governance structure</li>
+                <li>Our Statement of Faith</li>
+                <li>A 3-week Elder Cohort</li>
+                <li>Practical expectations and commitments</li>
+            </ul>
+
+            <div class="info-box info-box-gray">
+                <h4>Term Commitment</h4>
+                <p style="margin-bottom: 0;">Each November, you'll meet with your Campus Pastor to renew your commitment as an Elder or ask to be released from your commitment.</p>
+            </div>
+        </section>
+
+        <!-- Section 3: Qualifications -->
+        <section class="section" data-section="2" role="tabpanel" aria-labelledby="tab-2">
+            <h2>Biblical Qualifications</h2>
+            <p style="font-style: italic; color: #666;">Based on 1 Timothy 3:1-7 and Titus 1:5-9</p>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Above Reproach</div>
+                <div style="font-size: 0.9rem; color: #666;">Live a life beyond criticism with a good reputation</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Husband of One Wife</div>
+                <div style="font-size: 0.9rem; color: #666;">Be a faithful and committed husband</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Self-Controlled</div>
+                <div style="font-size: 0.9rem; color: #666;">Be clear-headed, disciplined, not given to extremes</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Sensible</div>
+                <div style="font-size: 0.9rem; color: #666;">Have mastery over emotions and desires</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Respectable</div>
+                <div style="font-size: 0.9rem; color: #666;">Be dignified and honorable</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Hospitable</div>
+                <div style="font-size: 0.9rem; color: #666;">Be welcoming and generous to others</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Able to Teach</div>
+                <div style="font-size: 0.9rem; color: #666;">Explain and apply Scripture, refute wrong teaching</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Not an Excessive Drinker</div>
+                <div style="font-size: 0.9rem; color: #666;">Not given to excess in alcohol or substances</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Not a Bully but Gentle</div>
+                <div style="font-size: 0.9rem; color: #666;">Not prone to anger, but kind and patient</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Not Quarrelsome</div>
+                <div style="font-size: 0.9rem; color: #666;">Avoid arguments and disputes</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Not Greedy</div>
+                <div style="font-size: 0.9rem; color: #666;">Not motivated by greed or materialism</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Manage Household Well</div>
+                <div style="font-size: 0.9rem; color: #666;">Demonstrate ability to lead and care for family</div>
+            </div>
+
+            <div class="qual-box">
+                <div class="qual-title">✓ Not a New Convert</div>
+                <div style="font-size: 0.9rem; color: #666;">Be an established believer</div>
+            </div>
+
+            <div class="info-box info-box-purple" style="margin-top: 1.5rem;">
+                <h4 style="color: #6a1b9a; margin-top: 0;">Discussion & Reflection</h4>
+                <label class="form-label" for="qual-reflection">Which qualifications do you feel confident in? Which areas need growth?</label>
+                <div class="textarea-wrapper">
+                    <textarea id="qual-reflection" placeholder="Your thoughts..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Expectations -->
+        <section class="section" data-section="3" role="tabpanel" aria-labelledby="tab-3">
+            <h2>Elder Expectations</h2>
+
+            <div class="info-box">
+                <h4>You Exemplify Godly Character</h4>
+                <p style="margin-bottom: 0;">Committed to prayer and God's Word. Living above reproach.</p>
+            </div>
+
+            <div class="info-box">
+                <h4>You Can Teach the Bible</h4>
+                <p style="margin-bottom: 0;">Ability to teach and encourage with sound doctrine.</p>
+            </div>
+
+            <div class="info-box">
+                <h4>You Lead Your Family Well</h4>
+                <p style="margin-bottom: 0;">Managing household competently, children under control.</p>
+            </div>
+
+            <h3>Submit Yourself To:</h3>
+            <ul>
+                <li>The Lordship of Jesus</li>
+                <li>Mutual submission to the Campus Pastor</li>
+                <li>Mutual submission to fellow Elders</li>
+                <li>New City Church's Statement of Faith</li>
+            </ul>
+
+            <h3>Partner with Campus Pastor To:</h3>
+            <ul>
+                <li>Protect the mission, vision, and values</li>
+                <li>Engage in difficult conversations for unity</li>
+                <li>Teach the Word of God</li>
+                <li>Actively shepherd the people</li>
+                <li>Attend scheduled Elder meetings</li>
+            </ul>
+
+            <div class="info-box info-box-purple" style="margin-top: 1.5rem;">
+                <h4 style="color: #6a1b9a; margin-top: 0;">Discussion & Reflection</h4>
+                <label class="form-label" for="expect-reflection">What questions do you have? What excites you most?</label>
+                <div class="textarea-wrapper">
+                    <textarea id="expect-reflection" placeholder="Your thoughts..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Governance -->
+        <section class="section" data-section="4" role="tabpanel" aria-labelledby="tab-4">
+            <h2>Church Governance</h2>
+            <p style="color: #666; margin-bottom: 1rem;">Understanding how New City Church is structured and led</p>
+
+            <div class="expandable">
+                <button class="expandable-header" onclick="toggleExpand(this)" aria-expanded="false" aria-controls="governance-elder-board">
+                    <span>Elder Board</span>
+                    <span class="arrow" aria-hidden="true">▼</span>
+                </button>
+                <div class="expandable-content" id="governance-elder-board">
+                    <p>Consists of:</p>
+                    <ul>
+                        <li>All Local Campus Church Elder Families</li>
+                        <li>The Lead Pastor</li>
+                        <li>The Executive Pastor (non-voting)</li>
+                    </ul>
+                    <p><strong>Key Responsibilities:</strong></p>
+                    <ul>
+                        <li>Provide oversight and accountability</li>
+                        <li>Hold Lead Pastor accountable</li>
+                        <li>Review Stewardship Team matters</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <button class="expandable-header" onclick="toggleExpand(this)" aria-expanded="false" aria-controls="governance-stewardship">
+                    <span>Stewardship Team</span>
+                    <span class="arrow" aria-hidden="true">▼</span>
+                </button>
+                <div class="expandable-content" id="governance-stewardship">
+                    <p>Responsible for operations, consisting of:</p>
+                    <ul>
+                        <li>Lead Pastor (Chair)</li>
+                        <li>Executive Pastor (non-voting)</li>
+                        <li>Local Campus Church Pastors</li>
+                        <li>One Elder Family from each Campus</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <button class="expandable-header" onclick="toggleExpand(this)" aria-expanded="false" aria-controls="governance-elder-family">
+                    <span>The "Elder Family" Model</span>
+                    <span class="arrow" aria-hidden="true">▼</span>
+                </button>
+                <div class="expandable-content" id="governance-elder-family">
+                    <p><strong>Biblical Foundation:</strong> "One Flesh" (Genesis 2:24, Matthew 19:5-6, Ephesians 5:31)</p>
+                    <p>Practically, this means:</p>
+                    <ul>
+                        <li>Wives attend Elder meetings</li>
+                        <li>Wives participate in discussions</li>
+                        <li>Wives "smell like sheep" and shepherd</li>
+                        <li>Wives use their gifts to build ministry</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box info-box-purple" style="margin-top: 1.5rem;">
+                <h4 style="color: #6a1b9a; margin-top: 0;">Discussion & Reflection</h4>
+                <label class="form-label" for="gov-reflection">How do you see yourself fitting in? Questions about the Elder Family model?</label>
+                <div class="textarea-wrapper">
+                    <textarea id="gov-reflection" placeholder="Your thoughts..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Statement of Faith -->
+        <section class="section" data-section="5" role="tabpanel" aria-labelledby="tab-5">
+            <h2>Statement of Faith</h2>
+            <p style="color: #666; margin-bottom: 1rem;">Understanding Essentials, Convictions, and Preferences</p>
+
+            <h3>ESSENTIALS (Non-negotiable)</h3>
+            <p>All members must agree:</p>
+            <ul>
+                <li>God: Father, Jesus, Holy Spirit (Trinity)</li>
+                <li>The Bible (inspired, without error)</li>
+                <li>The Gospel (salvation through Jesus)</li>
+                <li>Salvation (by grace through faith)</li>
+                <li>Creation (God created from nothing)</li>
+            </ul>
+
+            <h3>CONVICTIONS (Unity for leaders)</h3>
+            <p>All leaders maintain agreement:</p>
+            <ul>
+                <li>The Church (body of Christ)</li>
+                <li>Disciple-Making (primary command)</li>
+                <li>Baptism (believer's baptism)</li>
+                <li>Communion (symbolic)</li>
+                <li>Humanity (male and female, equal dignity)</li>
+                <li>Men and Women in Ministry</li>
+                <li>Elders (qualified men, "Elder Family")</li>
+                <li>Marriage (one man and one woman)</li>
+            </ul>
+
+            <h3>PREFERENCES (Grace in disagreement)</h3>
+            <p>Christians may disagree:</p>
+            <ul>
+                <li>Spiritual Gifts</li>
+                <li>Giving (tithe is starting point)</li>
+                <li>End Times</li>
+                <li>Politics</li>
+                <li>Personal Finances</li>
+                <li>Alcohol and Drugs</li>
+            </ul>
+
+            <div class="info-box info-box-purple" style="margin-top: 1.5rem;">
+                <h4 style="color: #6a1b9a; margin-top: 0;">Discussion & Reflection</h4>
+                <label class="form-label" for="faith-reflection">Any Convictions need clarification? How does this framework help ministry?</label>
+                <div class="textarea-wrapper">
+                    <textarea id="faith-reflection" placeholder="Your thoughts..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Cohort -->
+        <section class="section" data-section="6" role="tabpanel" aria-labelledby="tab-6">
+            <h2>Elder Cohort (3 Weeks)</h2>
+            <p style="color: #666; margin-bottom: 1rem;">Interactive learning journey with your Elder team</p>
+
+            <div class="expandable">
+                <button class="expandable-header" onclick="toggleExpand(this)" aria-expanded="false" aria-controls="cohort-week1">
+                    <span>Week 1: Qualifications & Shepherds</span>
+                    <span class="arrow" aria-hidden="true">▼</span>
+                </button>
+                <div class="expandable-content" id="cohort-week1">
+                    <div class="info-box">
+                        <p style="font-weight: 600; margin-bottom: 0.5rem;">Pre-Work:</p>
+                        <ul style="margin-bottom: 0;">
+                            <li>Read 1 Timothy 3:1-7, Titus 1:5-9</li>
+                            <li>Read chapters 2-5 from "Church Elders" by Jeramie Rinne</li>
+                        </ul>
+                    </div>
+
+                    <h4>Discussion: Elder as Shepherd</h4>
+                    <label class="form-label" for="w1-shepherd">What are practical ways you will 'smell like sheep'?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="w1-shepherd" placeholder="Your responses..."></textarea>
+                    </div>
+
+                    <h4>Discussion: Straying Sheep</h4>
+                    <label class="form-label" for="w1-straying">What are the types and how should you respond?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="w1-straying" placeholder="Your thoughts..."></textarea>
+                    </div>
+
+                    <h4>Reflection: Servant Leadership</h4>
+                    <label class="form-label" for="w1-leadership">Humility, Accountability, Honor, Trust</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="w1-leadership" placeholder="Your reflections..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <button class="expandable-header" onclick="toggleExpand(this)" aria-expanded="false" aria-controls="cohort-week2">
+                    <span>Week 2: Marriage & Spouses</span>
+                    <span class="arrow" aria-hidden="true">▼</span>
+                </button>
+                <div class="expandable-content" id="cohort-week2">
+                    <div class="info-box">
+                        <p style="font-weight: 600; margin-bottom: 0.5rem;">Pre-Work:</p>
+                        <ul style="margin-bottom: 0;">
+                            <li>Read Genesis 2:18-24</li>
+                            <li>Read Ephesians 5:21-33</li>
+                            <li>Read Matthew 19:4-6</li>
+                        </ul>
+                    </div>
+
+                    <label class="form-label" for="w2-spouse">What do you appreciate about your spouse? How will this bless the church?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="w2-spouse" placeholder="Your response..."></textarea>
+                    </div>
+
+                    <h4>Biblical Themes</h4>
+                    <label class="form-label" for="w2-biblical">Reflect on 'one flesh' teaching. How does this inform the Elder Family model?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="w2-biblical" placeholder="Your thoughts..."></textarea>
+                    </div>
+
+                    <h4>Practice</h4>
+                    <label class="form-label" for="w2-practice">How will you include your spouse? Questions or concerns?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="w2-practice" placeholder="Your reflections..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <button class="expandable-header" onclick="toggleExpand(this)" aria-expanded="false" aria-controls="cohort-week3">
+                    <span>Week 3: Conflict & Discipline</span>
+                    <span class="arrow" aria-hidden="true">▼</span>
+                </button>
+                <div class="expandable-content" id="cohort-week3">
+                    <div class="info-box">
+                        <p style="font-weight: 600; margin-bottom: 0.5rem;">Pre-Work:</p>
+                        <ul style="margin-bottom: 0;">
+                            <li>Read Matthew 18:15-20</li>
+                            <li>Read Titus 3:10-11</li>
+                            <li>Read 1 Corinthians 5:1-13</li>
+                            <li>Read 2 Corinthians 2:5-8</li>
+                        </ul>
+                    </div>
+
+                    <label class="form-label" for="w3-background">How was conflict resolved in your childhood home?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="w3-background" placeholder="Your response..."></textarea>
+                    </div>
+
+                    <div class="info-box info-box-gray">
+                        <p style="font-weight: 600; margin-bottom: 0.5rem;">A Shepherd's Prayer:</p>
+                        <p style="font-style: italic; font-size: 0.9rem; margin-bottom: 0;">
+                            "Jesus, You are the Good Shepherd. I need You to shepherd for me. You see what I can't. If [person] is causing harm, please remove them. I don't ask for destruction—provide a 'win' so they move on. If not causing harm, increase my love for them. Give me wisdom. Amen."
+                        </p>
+                    </div>
+
+                    <h4>Reflection</h4>
+                    <label class="form-label" for="w3-discipline">How do you balance truth and grace in church discipline?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="w3-discipline" placeholder="Your reflections..."></textarea>
+                    </div>
+
+                    <h4>Application</h4>
+                    <label class="form-label" for="w3-application">How will you develop skills for difficult conversations?</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="w3-application" placeholder="Action steps..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box info-box-gray" style="margin-top: 1.5rem;">
+                <h4>Cohort Completion</h4>
+                <p style="margin-bottom: 0;">After completing all three weeks, you'll be prepared for your interview with current Elders and your Campus Pastor before being presented to the church.</p>
+            </div>
+        </section>
+    </main>
+
+    <nav class="nav-footer">
+        <button class="nav-btn" id="prev-btn" onclick="prevSection()" aria-label="Previous section">← Prev</button>
+        <button class="complete-btn" id="complete-btn" onclick="toggleComplete()">Mark Complete</button>
+        <button class="nav-btn" id="next-btn" onclick="nextSection()" aria-label="Next section">Next →</button>
+    </nav>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="clear-modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+        <div class="modal-content">
+            <h3 id="modal-title">Clear All Data?</h3>
+            <p>This will permanently delete all your responses and progress. This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn confirm" onclick="clearAllData()">Clear Everything</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        const App = {
+            currentSection: 0,
+            completed: new Set(),
+            sections: ['Assessment', 'Welcome', 'Qualifications', 'Expectations', 'Governance', 'Faith', 'Cohort'],
+            saveTimer: null
+        };
+
+        // Initialize application
+        function init() {
+            loadData();
+            setupEventListeners();
+            updateUI();
+        }
+
+        // Load saved data from localStorage
+        function loadData() {
+            try {
+                // Load all textarea values
+                document.querySelectorAll('textarea').forEach(textarea => {
+                    const saved = localStorage.getItem(textarea.id);
+                    if (saved) {
+                        textarea.value = saved;
+                    }
+                });
+
+                // Load completed sections
+                const savedCompleted = localStorage.getItem('completed');
+                if (savedCompleted) {
+                    App.completed = new Set(JSON.parse(savedCompleted));
+                }
+
+                // Load current section
+                const savedSection = localStorage.getItem('currentSection');
+                if (savedSection !== null) {
+                    App.currentSection = parseInt(savedSection);
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showNotification('Error loading saved data', 'error');
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Auto-save on input
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', (e) => {
+                    saveField(e.target.id, e.target.value);
+                });
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                // Arrow key navigation (when not in textarea)
+                if (e.target.tagName !== 'TEXTAREA') {
+                    if (e.key === 'ArrowRight' && !document.getElementById('next-btn').disabled) {
+                        nextSection();
+                    } else if (e.key === 'ArrowLeft' && !document.getElementById('prev-btn').disabled) {
+                        prevSection();
+                    }
+                }
+            });
+
+            // Warn before leaving with unsaved changes
+            window.addEventListener('beforeunload', (e) => {
+                const hasContent = Array.from(document.querySelectorAll('textarea')).some(t => t.value.trim());
+                if (hasContent) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
+
+            // Close modal on outside click
+            document.getElementById('clear-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'clear-modal') {
+                    closeModal();
+                }
+            });
+        }
+
+        // Save individual field with debouncing
+        function saveField(id, value) {
+            clearTimeout(App.saveTimer);
+            
+            App.saveTimer = setTimeout(() => {
+                try {
+                    localStorage.setItem(id, value);
+                    showSaveIndicator();
+                } catch (error) {
+                    console.error('Error saving field:', error);
+                    showNotification('Error saving data', 'error');
+                }
+            }, 500);
+        }
+
+        // Show save indicator
+        function showSaveIndicator() {
+            const indicator = document.getElementById('save-indicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // Update UI
+        function updateUI() {
+            updateSections();
+            updateTabs();
+            updateButtons();
+            updateProgress();
+            updateCompletionNotice();
+        }
+
+        // Update section visibility
+        function updateSections() {
+            document.querySelectorAll('.section').forEach((section, i) => {
+                section.classList.toggle('active', i === App.currentSection);
+            });
+            
+            // Save current section
+            localStorage.setItem('currentSection', App.currentSection);
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Update tabs
+        function updateTabs() {
+            const tabsHTML = App.sections.map((name, i) => {
+                let classes = 'tab';
+                if (i === App.currentSection) classes += ' active';
+                if (App.completed.has(i)) classes += ' completed';
+                
+                return `<button 
+                    class="${classes}" 
+                    onclick="goToSection(${i})"
+                    role="tab"
+                    aria-selected="${i === App.currentSection}"
+                    aria-controls="section-${i}"
+                    id="tab-${i}"
+                >${App.completed.has(i) ? '✓ ' : ''}${name}</button>`;
+            }).join('');
+            
+            document.getElementById('tabs').innerHTML = tabsHTML;
+        }
+
+        // Update navigation buttons
+        function updateButtons() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const completeBtn = document.getElementById('complete-btn');
+            
+            prevBtn.disabled = App.currentSection === 0;
+            nextBtn.disabled = App.currentSection === App.sections.length - 1;
+            
+            if (App.completed.has(App.currentSection)) {
+                completeBtn.textContent = '✓ Completed';
+                completeBtn.classList.add('completed');
+            } else {
+                completeBtn.textContent = 'Mark Complete';
+                completeBtn.classList.remove('completed');
+            }
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const percentage = (App.completed.size / App.sections.length) * 100;
+            const progressFill = document.getElementById('progress-fill');
+            const progressBar = progressFill.parentElement;
+            
+            progressFill.style.width = percentage + '%';
+            progressBar.setAttribute('aria-valuenow', Math.round(percentage));
+            
+            document.getElementById('progress-text').textContent = 
+                `${App.completed.size} of ${App.sections.length} sections completed`;
+        }
+
+        // Update completion notice
+        function updateCompletionNotice() {
+            const activeSection = document.querySelector('.section.active');
+            const existingNotice = activeSection.querySelector('.completion-notice');
+            
+            if (existingNotice) {
+                existingNotice.remove();
+            }
+            
+            if (App.completed.size === App.sections.length) {
+                const notice = document.createElement('div');
+                notice.className = 'completion-notice';
+                notice.innerHTML = '<strong>🎉 All Complete!</strong> Click "Export" at the top and email to matt@newcitychurch.com';
+                activeSection.appendChild(notice);
+            }
+        }
+
+        // Navigation functions
+        function goToSection(index) {
+            App.currentSection = index;
+            updateUI();
+        }
+
+        function prevSection() {
+            if (App.currentSection > 0) {
+                App.currentSection--;
+                updateUI();
+            }
+        }
+
+        function nextSection() {
+            if (App.currentSection < App.sections.length - 1) {
+                App.currentSection++;
+                updateUI();
+            }
+        }
+
+        // Toggle section completion
+        function toggleComplete() {
+            if (App.completed.has(App.currentSection)) {
+                App.completed.delete(App.currentSection);
+            } else {
+                App.completed.add(App.currentSection);
+            }
+            
+            try {
+                localStorage.setItem('completed', JSON.stringify([...App.completed]));
+                updateUI();
+            } catch (error) {
+                console.error('Error saving completion status:', error);
+            }
+        }
+
+        // Toggle expandable sections
+        function toggleExpand(button) {
+            const content = button.nextElementSibling;
+            const arrow = button.querySelector('.arrow');
+            const isOpen = content.classList.contains('open');
+            
+            content.classList.toggle('open');
+            arrow.textContent = isOpen ? '▼' : '▲';
+            button.setAttribute('aria-expanded', !isOpen);
+        }
+
+        // Export responses
+        function exportResponses() {
+            const name = document.getElementById('name').value || 'Elder_Candidate';
+            const date = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            let html = generateExportHTML(name, date);
+            downloadHTML(html, name, date);
+            showNotification('Export successful! Check your downloads.', 'success');
+        }
+
+        // Generate export HTML
+        function generateExportHTML(name, date) {
+            let html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Elder Onboarding - ${name}</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            line-height: 1.6; 
+            color: #333;
+        }
+        h1 { 
+            color: #414042; 
+            border-bottom: 3px solid #00b1e0; 
+            padding-bottom: 10px; 
+        }
+        h2 { 
+            color: #414042; 
+            margin-top: 30px; 
+            border-bottom: 2px solid rgba(65, 64, 66, 0.2); 
+            padding-bottom: 5px; 
+        }
+        h3 { 
+            color: #414042; 
+            margin-top: 20px; 
+        }
+        .response { 
+            background: rgba(65, 64, 66, 0.03); 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-left: 3px solid #64ad89; 
+            border-radius: 4px; 
+        }
+        .label { 
+            font-weight: bold; 
+            color: #414042; 
+            margin-bottom: 5px; 
+        }
+        .value { 
+            color: #414042; 
+            white-space: pre-wrap; 
+        }
+        .header-info { 
+            background: rgba(0, 177, 224, 0.05); 
+            padding: 15px; 
+            border-radius: 4px; 
+            margin-bottom: 20px; 
+            border-left: 3px solid #00b1e0;
+        }
+        .empty-section {
+            color: #414042;
+            font-style: italic;
+            opacity: 0.5;
+        }
+        @media print {
+            body { margin: 0; }
+            .response { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Elder Onboarding Responses</h1>
+    <div class="header-info">
+        <p><strong>New City Church</strong></p>
+        <p><strong>Date:</strong> ${date}</p>
+        <p><strong>Candidate:</strong> ${name}</p>
+        <p><strong>Completed Sections:</strong> ${App.completed.size} of ${App.sections.length}</p>
+    </div>`;
+
+            html += '<h2>Elder Self-Assessment</h2>';
+            
+            html += '<h3>Maturity - Life Experience & Spiritual Formation</h3>';
+            html += addResponse('Personal Reflection', 'mat-personal');
+            html += addResponse('Coach/Pastor Observations', 'mat-coach');
+            html += addResponse('Action Steps & Goals', 'mat-goals');
+            html += addResponse('Progress Notes', 'mat-progress');
+            
+            html += '<h3>Competency - Leadership & Ministry Skills</h3>';
+            html += addResponse('Personal Reflection', 'comp-personal');
+            html += addResponse('Coach/Pastor Observations', 'comp-coach');
+            html += addResponse('Action Steps & Goals', 'comp-goals');
+            html += addResponse('Progress Notes', 'comp-progress');
+            
+            html += '<h3>Shepherding - Care & Pastoral Heart</h3>';
+            html += addResponse('Personal Reflection', 'shep-personal');
+            html += addResponse('Coach/Pastor Observations', 'shep-coach');
+            html += addResponse('Action Steps & Goals', 'shep-goals');
+            html += addResponse('Progress Notes', 'shep-progress');
+            
+            if (hasContent('qual-reflection')) {
+                html += '<h2>Biblical Qualifications - Reflection</h2>';
+                html += addResponse('', 'qual-reflection');
+            }
+            
+            if (hasContent('expect-reflection')) {
+                html += '<h2>Elder Expectations - Reflection</h2>';
+                html += addResponse('', 'expect-reflection');
+            }
+            
+            if (hasContent('gov-reflection')) {
+                html += '<h2>Church Governance - Reflection</h2>';
+                html += addResponse('', 'gov-reflection');
+            }
+            
+            if (hasContent('faith-reflection')) {
+                html += '<h2>Statement of Faith - Reflection</h2>';
+                html += addResponse('', 'faith-reflection');
+            }
+            
+            html += '<h2>Elder Cohort (3 Weeks)</h2>';
+            
+            if (hasAnyContent(['w1-shepherd', 'w1-straying', 'w1-leadership'])) {
+                html += '<h3>Week 1: Qualifications & Elders as Shepherds</h3>';
+                html += addResponse('Elder as Shepherd', 'w1-shepherd');
+                html += addResponse('Types of Straying Sheep', 'w1-straying');
+                html += addResponse('Servant Leadership', 'w1-leadership');
+            }
+            
+            if (hasAnyContent(['w2-spouse', 'w2-biblical', 'w2-practice'])) {
+                html += '<h3>Week 2: Marriage & Role of Spouses</h3>';
+                html += addResponse('About My Spouse', 'w2-spouse');
+                html += addResponse('Biblical Themes Discussion', 'w2-biblical');
+                html += addResponse('Elder Family Model in Practice', 'w2-practice');
+            }
+            
+            if (hasAnyContent(['w3-background', 'w3-discipline', 'w3-application'])) {
+                html += '<h3>Week 3: Conflict Resolution & Church Discipline</h3>';
+                html += addResponse('Conflict Background', 'w3-background');
+                html += addResponse('Reflection on Church Discipline', 'w3-discipline');
+                html += addResponse('Personal Application', 'w3-application');
+            }
+            
+            html += `
+    <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #ddd; color: #999; font-size: 0.9rem;">
+        <p>Generated from Elder Onboarding System - New City Church</p>
+        <p>Export Date: ${new Date().toLocaleString()}</p>
+    </div>
+</body>
+</html>`;
+            
+            return html;
+        }
+
+        // Helper: Add response to export
+        function addResponse(label, id) {
+            const element = document.getElementById(id);
+            if (!element) return '';
+            
+            const value = element.value.trim();
+            if (!value) {
+                return `<div class="response">
+                    ${label ? `<div class="label">${label}:</div>` : ''}
+                    <div class="value empty-section">No response provided</div>
+                </div>`;
+            }
+            
+            return `<div class="response">
+                ${label ? `<div class="label">${label}:</div>` : ''}
+                <div class="value">${escapeHtml(value)}</div>
+            </div>`;
+        }
+
+        // Helper: Check if field has content
+        function hasContent(id) {
+            const element = document.getElementById(id);
+            return element && element.value.trim();
+        }
+
+        // Helper: Check if any field has content
+        function hasAnyContent(ids) {
+            return ids.some(id => hasContent(id));
+        }
+
+        // Helper: Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Download HTML file
+        function downloadHTML(html, name, date) {
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const filename = `Elder_Onboarding_${name.replace(/\s+/g, '_')}_${date.replace(/\s+/g, '_').replace(/,/g, '')}.html`;
+            
+            a.href = url;
+            a.download = filename;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+        }
+
+        // Clear data confirmation
+        function confirmClearData() {
+            document.getElementById('clear-modal').classList.add('show');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('clear-modal').classList.remove('show');
+        }
+
+        // Clear all data
+        function clearAllData() {
+            try {
+                // Clear all localStorage
+                localStorage.clear();
+                
+                // Reset application state
+                App.currentSection = 0;
+                App.completed = new Set();
+                
+                // Clear all textareas
+                document.querySelectorAll('textarea').forEach(textarea => {
+                    textarea.value = '';
+                });
+                
+                // Update UI
+                updateUI();
+                
+                // Close modal
+                closeModal();
+                
+                showNotification('All data cleared successfully', 'success');
+            } catch (error) {
+                console.error('Error clearing data:', error);
+                showNotification('Error clearing data', 'error');
+            }
+        }
+
+        // Show notification (simple implementation)
+        function showNotification(message, type) {
+            // You could implement a toast notification system here
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
